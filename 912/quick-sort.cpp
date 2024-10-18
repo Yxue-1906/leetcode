@@ -4,56 +4,48 @@
 
 #include <vector>
 #include <iostream>
+#include <queue>
+
+using namespace std;
 
 class Solution {
- public:
-  void sort(std::vector<int> &nums, size_t left, size_t right) {
-    if (right - left <= 1) return;
-    size_t partition = left;
+public:
+  vector<int> sortArray(vector<int>& nums) {
+    // 三路排序？
 
-    size_t i = left, j = right;
-    while (i < j) {
-      do ++i; while (i < right && nums[i] <= nums[partition]);
-      do --j; while (j > left && nums[j] >= nums[partition]);
-      if (i < j)
-        std::swap(nums[i], nums[j]);
-    }
-    std::swap(nums[partition], nums[j]);
-    sort(nums, left, j - 1);
-    sort(nums, j + 1, right);
-  }
+    queue<pair<int, int>> ranges;
+    ranges.push({0, nums.size()});
+    while(!ranges.empty()) {
+      auto [l, r] = ranges.front();
+      ranges.pop();
 
-  void sortArray(std::vector<int> &nums) {
-    std::vector<std::pair<int, int>> to_sorts;
+      if(r - l < 2) continue;
 
-    if (nums.size() < 2) return;
+      auto partition = nums[l];
 
-    to_sorts.emplace_back(0, nums.size() - 1);
-
-    for (int i = 0; i < to_sorts.size(); ++i) {
-      auto [left_end, right_end] = to_sorts[i];
-      if (right_end - left_end < 1) continue;
-
-      auto partition = left_end;
-
-      auto left = left_end, right = right_end;
-      while (left < right) {
-        while (left < right_end && nums[left] <= nums[partition]) ++left;
-        while (right > left_end && nums[right] > nums[partition]) --right;
-        if (left < right)
-          std::swap(nums[left], nums[right]);
+      size_t i, j, k;
+      i = j = l;
+      k = r;
+      while(i < k){
+        if(nums[i] < partition) {
+          std::swap(nums[i++], nums[j++]);
+        } else if(nums[i] > partition) {
+          std::swap(nums[i], nums[--k]);
+        } else {
+          ++i;
+        }
       }
 
-      std::swap(nums[partition], nums[right]);
-
-      to_sorts.emplace_back(left_end, right - 1);
-      to_sorts.emplace_back(right + 1, right_end);
+      ranges.push({l, j});
+      ranges.push({k, r});
     }
+
+    return std::move(nums);
   }
 };
 
 int main() {
-  std::vector<int> data = {3, -1};
+  std::vector<int> data = {-4,0,7,4,9,-5,-1,0,-7,-1};
 
   Solution s;
   s.sortArray(data);
