@@ -48,8 +48,7 @@ int main() {
   std::vector<int> data = {-4,0,7,4,9,-5,-1,0,-7,-1};
 
   Solution s;
-  s.sortArray(data);
-  for (auto &v: data) {
+  for (auto &v: s.sortArray(data)) {
     std::cout << v << ' ';
   }
   return 0;

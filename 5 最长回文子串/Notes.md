@@ -1,0 +1,5 @@
+- dynamic programming
+  - if \[i, j] is a palindromic string, and if str\[i - 1] == str\[j + 1], then str\[i - 1, j + 1] is a palindromic string 
+  - so dp\[i, j] means whether str\[i, j] is a palindromic string.
+- TODO
+  - learn [Manacher Algo](https://oi-wiki.org/string/manacher/)
